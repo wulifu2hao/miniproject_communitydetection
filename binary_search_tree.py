@@ -1,3 +1,6 @@
+# This is an implementation of BST that I copy from https://interactivepython.org/courselib/static/pythonds/Trees/SearchTreeImplementation.html
+# I've not done a check on whether there is bug or whether it's self balanced
+
 class TreeNode:
     def __init__(self,key,val,left=None,right=None,parent=None):
         self.key = key

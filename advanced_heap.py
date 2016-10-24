@@ -1,6 +1,7 @@
 """
     Advance_heap is a simple customized version of heap
     which supports heapify, push, pop_max, peek_max, modify_key
+    note that this data structure may still undergo changes as I implement the greedy merge algorithm
 """
 
 class Heap_item:
