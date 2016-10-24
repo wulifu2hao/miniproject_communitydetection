@@ -113,6 +113,7 @@ class Advance_heap:
         keys = [(item.key, item.position) for item in self.heap_item_list]
         print keys
 
+# This program is only a sanity test to make sure that the heap works
 if __name__ == "__main__":
     from random import randint
 
