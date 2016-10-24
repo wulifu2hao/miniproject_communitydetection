@@ -3,7 +3,7 @@ import json
 # input: the path of input file
 # Output: graph in adj list; num_nodes, num_edges
 # Note: it assumes that at the beginning of the file there would be a line that contains graph num of nodes info in the format of:
-#   '# Nodes: <num of nodes> Edges: <num of edges>'
+#   # Nodes: <num of nodes> Edges: <num of edges>
 #   After that each line that contains exactly two integers are consider an edge
 # Usage: assuming your file is in the same directory of this file, you can use this function by doing 'from graph_loader import read_graph'
 def read_graph(input_path):
