@@ -24,7 +24,8 @@ class Greedy_Merger:
         self.delta_Q_heap_list = [None for i in range(self.num_nodes)]
 
         # max_delta_Q_each_row keep tracks of the maximum deata_Q of each row
-        max_delta_Q_each_row = [Heap_item(0, (i, 0)) for i in range(self.num_nodes)]
+        max_delta_Q_each_row = []
+        # max_delta_Q_each_row = [Heap_item(0, (i, 0)) for i in range(self.num_nodes)]
 
         self.ai_list = [0 for i in range(self.num_nodes)]
 
@@ -38,7 +39,7 @@ class Greedy_Merger:
             for idx, j in enumerate(graph[i]):
                 degree_j = len(graph[j])
 
-                delta_Q = 0.5*self.num_edges-float(degree_i*degree_j)/((2*self.num_edges)**2)
+                delta_Q = (1.0/(2*self.num_edges))-float(degree_i*degree_j)/((2*self.num_edges)**2)
 
                 # the key of the heap is the dalta_Q
                 # the value of each node is the index of the neighbour j
@@ -48,9 +49,9 @@ class Greedy_Merger:
                 delta_Q_map[j] = heap_item_list[idx]
 
             self.delta_Q_heap_list[i] = Advance_heap(heap_item_list)
-            max_delta_Q_item = self.delta_Q_heap_list[i].peek_max()
-            max_delta_Q_each_row[i].key = max_delta_Q_item.key
-            max_delta_Q_each_row[i].value = (i, max_delta_Q_item.value)
+            if not self.delta_Q_heap_list[i].is_empty():
+                max_delta_Q_item = self.delta_Q_heap_list[i].peek_max()
+                max_delta_Q_each_row.append(Heap_item(max_delta_Q_item.key, (i, max_delta_Q_item.value)))
 
             # assign the initial ai value to ai list
             ai = float(degree_i)/(2*self.num_edges)
@@ -58,8 +59,9 @@ class Greedy_Merger:
 
         # we define an extra data structure to keep track of the max_delta_Q item of each row
         self.map_of_max_delta_Q_of_each_row = dict()
-        for row in range(self.num_nodes):
-            self.map_of_max_delta_Q_of_each_row[row] = max_delta_Q_each_row[row]
+        for item in max_delta_Q_each_row:
+            row, _ = item.value
+            self.map_of_max_delta_Q_of_each_row[row] = item
 
         self.heap_of_max_delta_Q_of_each_row = Advance_heap(max_delta_Q_each_row)
 
@@ -67,6 +69,7 @@ class Greedy_Merger:
 
 
     def solve(self):
+        print_if_verbose('solving graph with %d nodes and %d edges' %(self.num_nodes, self.num_edges))
         self.init_delta_Q()
         self._validate_and_print_status('after initialization')
 
@@ -222,7 +225,7 @@ class Greedy_Merger:
                         print_if_verbose('deleting row %d because self.delta_Q_heap_list[row] is empty'%row)
                     else:
                         too_small_key = self.delta_Q_heap_list[row].peek_max().key
-                        print_if_verbose('deleting row %d delta_Q %f is too small'%(row, too_small_key))
+                        print_if_verbose('deleting row %d because delta_Q %f is too small'%(row, too_small_key))
 
                     self.heap_of_max_delta_Q_of_each_row.modify_key(previous_max_delta_Q_item_of_this_row, 0)
                     del self.map_of_max_delta_Q_of_each_row[row]
@@ -323,12 +326,18 @@ class Greedy_Merger:
         print_if_verbose(current_stage+'\n'+matrix_str+delta_Q_heap_list_status_str+max_delta_Q_of_each_row_str)
 
 if __name__ == '__main__':
-    for i in range(5):
-        print ''.join(['-']*50)
+    for i in range(10):
+        print ''.join(['-']*100)
 
-    simple_graph, _, num_edges = graph_loader.get_simply_test_graph()
-    greedy_merger = Greedy_Merger(simple_graph, num_edges)
+    # simple_graph, _, num_edges = graph_loader.get_simple_test_graph(5, 10)
+    # greedy_merger = Greedy_Merger(simple_graph, num_edges)
+    # greedy_merger.solve()
+
+    graph, _, num_edges = graph_loader.read_graph_json('/Users/lifu.wu/Downloads/community_detection_data/wiki_vote/wiki-Vote.json')
+    greedy_merger = Greedy_Merger(graph, num_edges)
     greedy_merger.solve()
 
+    from datetime import datetime
+    print 'finish at', datetime.now()
 
 
