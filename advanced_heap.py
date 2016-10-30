@@ -16,9 +16,9 @@ class Advance_heap:
         self.heap_item_list = heap_item_list
         self.heapify()
 
-    def push(self, heap_item):
+    def push(self, item):
         self.heap_item_list.append(item)
-        item.position = len(self.heap_item_list)
+        item.position = len(self.heap_item_list)-1
         self._siftdown(0, item.position)
 
     def is_empty(self):
@@ -113,9 +113,27 @@ class Advance_heap:
         keys = [(item.key, item.position) for item in self.heap_item_list]
         print keys
 
-# This program is only a sanity test to make sure that the heap works
-if __name__ == "__main__":
-    from random import randint
+def _assert_sorted(lst, test_name):
+    if len(lst) == 0:
+        return
+
+    last_item = lst[0]
+    for i in range(1, len(lst)):
+        cur_item = lst[i]
+        if cur_item > last_item:
+            error_name = '%s fails: %s' %(test_name, str(lst))
+            raise ValueError(error_name)
+
+    return
+
+def _heap_sort(heap):
+    res = []
+    while not heap.is_empty():
+        item = heap.pop_max()
+        res.append(item.key)
+    return res
+
+def _test_sanity_check():
 
     # Simple sanity test
     data = [1, 3, 5, 7, 9, 2, 4, 6, 8, 0]
@@ -130,10 +148,24 @@ if __name__ == "__main__":
 
         heap.modify_key(random_item, random_new_key)
 
-    heap._print_heap_item_list()
+    # heap._print_heap_item_list()
 
-    while not heap.is_empty():
-        item = heap.pop_max()
-        print item.key,
+    _assert_sorted(_heap_sort(heap), 'sanity check')
+
+def _test_push():
+    test_heap = Advance_heap()
+    test_heap.push(Heap_item(1,'1'))
+    test_heap.push(Heap_item(2,'1'))
+    test_heap.push(Heap_item(3,'1'))
+
+    _assert_sorted(_heap_sort(test_heap), 'sanity check')
+
+
+# This program is only a sanity test to make sure that the heap works
+if __name__ == "__main__":
+    from random import randint
+
+    _test_sanity_check()
+    _test_push()
 
 

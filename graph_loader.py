@@ -50,11 +50,26 @@ def read_graph_json(input_path):
 
     return obj['grpah'],obj['num_nodes'],obj['num_edges']
 
+def get_simply_test_graph():
+    graph = [
+    [1,2],
+    [0,2],
+    [0,1,3],
+    [2,4],
+    [3,5,6],
+    [4,6],
+    [4,5],
+    ]
+
+    num_edges = 0
+    for neighbours in graph:
+        num_edges += len(neighbours)
+    return graph, len(graph), num_edges
 
 # you can use this program to convert a file that conforms to the format that can be understood by the read_graph function to json format
 # so that you don't have to parse the input file every time when you run your program
 # This would save you significant amount of time when processing input that is large
-if __name__ == "__main__":
+if __name__ == '__main__':
     from sys import argv
     from os.path import exists, splitext
     if len(argv) != 2:
