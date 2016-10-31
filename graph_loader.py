@@ -1,4 +1,5 @@
 import json
+from random import randint
 
 # input: the path of input file
 # Output: graph in adj list; num_nodes, num_edges
@@ -90,8 +91,8 @@ def read_graph_json(input_path):
 
     return obj['grpah'],obj['num_nodes'],obj['num_edges']
 
+# get_simple_test_graph creates a graph with specific group number and group size, within a group all nodes are fully connected, however, there is only one edge to connect adjacent group, so that our partition algorithm is suppose to be able to divide this graph nicely into groups
 def get_simple_test_graph(num_group, group_size):
-    from random import randint
 
     num_nodes = num_group * group_size
     graph = [[] for i in range(num_nodes)]
@@ -118,8 +119,29 @@ def get_simple_test_graph(num_group, group_size):
     num_edges = (num_group-1) + (group_size-1) * num_nodes
     return graph, len(graph), num_edges
 
+# get_graph_with_n_and_m generate a random graph,
+# given the num_nodes and num_edges
+# users should be careful not to give a num_edges > num_nodes^2/2
+def get_graph_with_n_and_m(num_nodes, num_edges):
+    graph = [set() for i in range(num_nodes)]
+    for edge_idx in range(num_edges):
+        while True:
+            node_idx_1 = randint(0, num_nodes-1)
+            node_idx_2 = randint(0, num_nodes-1)
+            if node_idx_2 != node_idx_1 and node_idx_2 not in graph[node_idx_1]:
+                break
+        graph[node_idx_1].add(node_idx_2)
+        graph[node_idx_2].add(node_idx_1)
+
+    graph = [list(neighbour_set) for neighbour_set in graph]
+    return graph, num_nodes, num_edges
+
 def _test_get_simple_test_graph():
     graph, _, num_edges = get_simple_test_graph(3,4)
+    print graph
+
+def _test_get_graph_with_n_and_m():
+    graph, _, _ = get_graph_with_n_and_m(10, 40)
     print graph
 
 # you can use this program to convert a file that conforms to the format that can be understood by the read_graph function to json format
