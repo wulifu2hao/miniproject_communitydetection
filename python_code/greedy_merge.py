@@ -386,9 +386,9 @@ if __name__ == '__main__':
     for i in range(10):
         print ''.join(['-']*100)
 
-    # _test_greedy_merge_sanity_test()
+    _test_greedy_merge_sanity_test()
 
-    _test_experiment_time_complexity_on_m()
+    # _test_experiment_time_complexity_on_m()
 
     # graph, _, num_edges = graph_loader.read_graph_json('/Users/lifu.wu/Downloads/community_detection_data/wiki_vote/wiki-Vote.json')
     # greedy_merger = Greedy_Merger(graph, num_edges)
