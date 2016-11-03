@@ -1,7 +1,9 @@
+package GirmanNewmanClustering;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-
+//try to finalize the variable because it is a static graph.
 public class Graph {
     private Set<Edge> edgeList;
     private HashMap<Integer,Node> nodeList;
@@ -25,5 +27,17 @@ public class Graph {
     
     public Set<Edge> getEdgeList() {
         return edgeList;
+    }
+    /*
+     * return info about the number of edges
+     */
+    public int getNumberOfEdge(){
+    	return edgeList.size();
+    }
+    /*
+     * return info about the number of nodes
+     */
+    public int getNumberOfNode(){
+    	return nodeList.size();
     }
 }
