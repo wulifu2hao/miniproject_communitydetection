@@ -20,7 +20,9 @@ public class Graph {
     public void addNode(final Node node) {
         nodeList.put(node.getId(), node);
     }
-
+    public void deleteEdge(Edge edge){
+    	edgeList.remove(edge);
+    }
     public HashMap<Integer, Node> getNodeList() {
         return nodeList;
     }
