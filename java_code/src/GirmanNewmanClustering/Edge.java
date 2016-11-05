@@ -4,7 +4,7 @@ package GirmanNewmanClustering;
 public class Edge{	
     private int destinationNodeId;
     private int sourceNodeId;
-    public double betweenness=0.0;
+    private double betweenness=0.0;
     
     public Edge(final int source, final int destination) {
         this.sourceNodeId = source;
@@ -19,4 +19,8 @@ public class Edge{
     public double getBetweenness() {
         return betweenness;
     }
+    public void increaseBetweennessByOne() {
+        betweenness++;
+    }
+    
 }

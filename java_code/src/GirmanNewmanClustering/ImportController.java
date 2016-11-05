@@ -5,7 +5,7 @@ import java.lang.ArrayIndexOutOfBoundsException;
 import java.util.Scanner;
 
 /*
- * data set features:
+ * requirement on data set:
  * format:<node1,node2>
  * no duplicate edge in the edge list.
  * undirected,unweighted,static graph
@@ -13,13 +13,12 @@ import java.util.Scanner;
 
 public class ImportController {
 	
-		//public void importGraph(Graph graph) throws IOException{
-		public static void main(String[] args) throws IOException{
+		public static Graph importGraph(String path) throws IOException{
 			Graph graph=new Graph();
 			int countEdge=0;
 			int countNode=0;
 			try{
-				Scanner sc =new Scanner(new File("/Users/yangtingting/Documents/miniproject/miniproject_communitydetection/datafile/network.txt"));
+				Scanner sc =new Scanner(new File(path));
 		        String[] temp=null;
 		        //store a graph into a graph data structure
 		        while(sc.hasNextLine()){
@@ -63,6 +62,7 @@ public class ImportController {
 			System.out.println("the number of nodes in the dataset is "+countNode);
 			System.out.println("the number of edges in the graph is "+graph.getNumberOfEdge());
 			System.out.println("the number of nodes in the graph is "+graph.getNumberOfNode());
+			return graph;
 	}
 		
 
