@@ -49,7 +49,7 @@ public class CommunityDection{
 	   private static final int NUMBER_GROUND_TRUTH=5000;		//used to check if satisfying termination condition,the number of communities in reality.
 	   private static int sampleSize;	//maximum =Cn2,n is the number of distinct nodes in the graph.
 	  
-	   public static void solve(Graph graph, int numberGroundTruth, String outputPath) throws Exception{
+	   public static void solve(Graph graph, int numberGroundTruth, String outputPath, double sampleRate) throws Exception{
 		   //keep removing edges form the graph until number of communities equals the number of ground truth.
 	       int numberOfCommunity=1;
 	       int counter = 0;
@@ -57,7 +57,12 @@ public class CommunityDection{
 	    	   long startTime = System.currentTimeMillis();
 	    	   
 	    	   //update the edge betweenness of all edges and find the edge with the highest betweenness
-	    	   Edge edge=EdgeBetweenness.findHighestEdge(graph);
+	    	   Edge edge;
+	    	   if(sampleRate >= 1){
+	    		   edge=EdgeBetweenness.findHighestEdge(graph);
+	    	   } else {
+	    		   edge=EdgeBetweenness.findHighestEdgeRandom(graph, sampleRate);
+	    	   }
 	    	   // TODO: possible improvement: update only those that are affected by the previous edge removal
 	    	   // TODO: possible improvement: update base on a sample of nodes instead of all nodes
 	    	   if (edge == null) {
@@ -75,7 +80,7 @@ public class CommunityDection{
 	    	   counter ++;
 	    	   System.out.println("counter: "+counter);
 	    	   long timeUsed = System.currentTimeMillis() - startTime;
-	    	   System.out.println("timeUsed for this round: "+ timeUsed);
+	    	   System.out.println("timeUsed for this round: "+ timeUsed+"ms");
 		    }
 		   
 	       ArrayList<Set<Integer>> communities = graph.getConnectedComponents();
@@ -126,7 +131,7 @@ public class CommunityDection{
 				testGraph.addNode(node);
 			}
 			
-			solve(testGraph, 2, "output.txt");
+			solve(testGraph, 2, "output.txt", 1);
 	   }
 	   
 	   private static void testSolveArtificialGraph(int numCommunities, int communitySize, double d, double e) throws Exception{
@@ -135,12 +140,12 @@ public class CommunityDection{
 		   
 		   Graph graph = GraphGenerator.generateGraph(numCommunities, communitySize, d, e);		   		   
 		   System.out.println("graph generated");
-		   solve(graph, numCommunities, "output.txt");
+		   solve(graph, numCommunities, "output.txt", 0.5);
 	   }
 	   
 	   
 	   public static void main(String[] args) throws Exception{
-		   testSolveArtificialGraph(5, 10, 0.8, 0.2);
+		   testSolveArtificialGraph(5, 20, 0.8, 0.2);
 		   
 //		   if (args.length!=1) {
 //			   System.err.println("Usage: CommunityDection <pathToDataFile>");

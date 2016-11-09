@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 class ShortestPaths {
@@ -20,8 +21,43 @@ class ShortestPaths {
 
 public class EdgeBetweenness {
 
+	public static Edge findHighestEdge(Graph graph){
+		HashMap<Integer, Node> nodeList = graph.getNodeList();
+		return findHighestEdgeBase(graph, nodeList);
+	}
+	
+	// this method takes in a graph and return the edge with the highest betweenness by random sampling
+	public static Edge findHighestEdgeRandom(Graph graph, double sampleRate){		
+		//   1. randomly sample a set of nodes according to the sample rate
+		//		for each node in the sample, do a BFS to find its number and distance of shortest path to all other nodes
+		//		this should take O(sm)		
+		//	 2. for every edge, compute its betweenness from every pair of nodes' in the sample
+		//		this should take O(ms^2)
+				
+		return findHighestEdgeBase(graph, sampleNodes(graph, sampleRate));
+	}
+	
+	private static HashMap<Integer, Node> sampleNodes(Graph graph, double sampleRate){
+		Random rand = new Random(System.currentTimeMillis());		
+		HashMap<Integer, Node> nodeSample = new HashMap<Integer, Node>();
+		
+		HashMap<Integer, Node> nodeList = graph.getNodeList();
+		for (Map.Entry<Integer, Node> entry : nodeList.entrySet()) {
+			double randomDouble = rand.nextDouble();
+			if (randomDouble > sampleRate){
+				continue;
+			}
+			
+			Integer nodeIdx = entry.getKey();
+			Node node = entry.getValue();
+			nodeSample.put(nodeIdx, node);			
+		}
+		
+		return nodeSample;
+	}
+	
 	// this method takes in a graph and return the edge with the highest betweenness
-	public static Edge findHighestEdge(Graph graph){		
+	public static Edge findHighestEdgeBase(Graph graph, HashMap<Integer, Node> nodeSample){		
 		//   1. for every node, do a BFS to find its number and distance of shortest path to all other nodes
 		//		this should take O(nm)		
 		//	 2. for every edge, compute its betweenness from every pair of nodes' shortest path	
@@ -29,7 +65,7 @@ public class EdgeBetweenness {
 		
 		HashMap<Integer, Node> nodeList = graph.getNodeList();
 		HashMap<Integer, HashMap<Integer, ShortestPaths>> shortestPathMap = new HashMap<Integer, HashMap<Integer, ShortestPaths>>(); 
-		for (Map.Entry<Integer, Node> entry : nodeList.entrySet()) {
+		for (Map.Entry<Integer, Node> entry : nodeSample.entrySet()) {
 			
 			Integer nodeIdx = entry.getKey();
 			
@@ -96,7 +132,7 @@ public class EdgeBetweenness {
 			
 			float betweenessOfThisEdge = 0;
 			
-			for (Map.Entry<Integer, Node> nodeEntry1 : nodeList.entrySet()) {
+			for (Map.Entry<Integer, Node> nodeEntry1 : nodeSample.entrySet()) {
 				Integer node1Idx = nodeEntry1.getKey();
 				HashMap<Integer, ShortestPaths> shortestPathMapForNode1 = shortestPathMap.get(node1Idx);
 				
@@ -109,7 +145,7 @@ public class EdgeBetweenness {
 					continue;
 				}
 				
-				for (Map.Entry<Integer, Node> nodeEntry2 : nodeList.entrySet()) {
+				for (Map.Entry<Integer, Node> nodeEntry2 : nodeSample.entrySet()) {
 					Integer node2Idx = nodeEntry2.getKey();
 					if (node1Idx == node2Idx){
 						continue;
@@ -170,18 +206,7 @@ public class EdgeBetweenness {
 		
 		return bestEdge;
 	}
-	
-	// this method takes in a graph and return the edge with the highest betweenness by random sampling
-	public static Edge findHighestEdgeRandom(Graph graph, float sampleRate){		
-		//   1. randomly sample a set of nodes according to the sample rate
-		//		for each node in the sample, do a BFS to find its number and distance of shortest path to all other nodes
-		//		this should take O(sm)		
-		//	 2. for every edge, compute its betweenness from every pair of nodes' in the sample
-		//		this should take O(ms^2)
 		
-		return null;
-	}
-	
 	private static void testFindHighestEdge(){
 		Graph testGraph = new Graph();
 		for(int i=0; i<5; i++){
