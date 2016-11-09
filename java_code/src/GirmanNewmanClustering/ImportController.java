@@ -24,8 +24,6 @@ public class ImportController {
 		        while(sc.hasNextLine()){
 		        	//sparse into two nodes and store them in A and B
 		        	temp=sc.nextLine().split("\t");
-		        	System.out.println("temp[0] is "+temp[0]);
-		        	System.out.println("temp[1] is "+temp[1]);
 		        	int A=Integer.parseInt(temp[0]);
 		        	int B=Integer.parseInt(temp[1]);
 		        	
@@ -38,14 +36,18 @@ public class ImportController {
 		        	//if(node not in the nodeList by checking the nodeId) create a new node object and append it into the graph's nodeList;
 		        	//else append the other node to the node's neighbour set
 		        	if (!graph.getNodeList().containsKey(A)){
-		        		graph.addNode(new Node(A,B));
+		        		Node newNode = new Node(A);
+		        		newNode.addNeighbours(B);
+		        		graph.addNode(newNode);
 		        		countNode++;
 		        	}
 		        	else {
 		        		graph.getNodeList().get(A).addNeighbours(B);
 		        	}
 		        	if (!graph.getNodeList().containsKey(B)){
-		        		graph.addNode(new Node(B,A));
+		        		Node newNode = new Node(B);
+		        		newNode.addNeighbours(A);
+		        		graph.addNode(newNode);
 		        		countNode++;
 		        	}
 		        	else {

@@ -19,21 +19,23 @@ public class Evaluation {
 	
 	public  static void main(String[] args) throws IOException{
 		
-		if (args.length!=2) {
+		/*if (args.length!=2) {
 			System.err.println("Usage: Evaluation <path to output file> <path to ground truth>");
 			System.exit(2);
-		}
-		
+		}*/
+		/*
 		String pathIn=args[0];
-		String pathOut=args[1];
+		String pathOut=args[1];*/
 		
+		String pathIn="/Users/yangtingting/Documents/miniproject/miniproject_communitydetection/datafile/testoutput.txt";
+		String pathOut="/Users/yangtingting/Documents/miniproject/miniproject_communitydetection/datafile/testgroundtruth.txt";
 		int evaluation=0;
 		
 		//add index to every line in the ground truth file;
 		try{
-			FileReader fr=new FileReader(args[1]);
+			FileReader fr=new FileReader(pathOut);
 			BufferedReader br=new BufferedReader(fr);
-			FileWriter fw=new FileWriter(args[0]);
+			FileWriter fw=new FileWriter(pathOut);
 			PrintWriter pw=new PrintWriter(fw);
 			String str="";
 			int count=1;
@@ -44,7 +46,6 @@ public class Evaluation {
 			System.out.print("the total number of lines is:"+count);
 			br.close();
 			pw.close();
-		
 		
 			//compare every community in output file with ground truth file
 			Scanner sc1 =new Scanner(new File(pathIn));
@@ -82,13 +83,13 @@ public class Evaluation {
 			    }
 			    //compute the sharing index of the community;
 			    HashMap<Integer,Integer> frequencyList=new HashMap<Integer,Integer>();
-			    Collection<Set<Integer>> setPackage=container.values();
-			    for(Set set:setPackage){
-			    	for(int i: set){
-			    		if(!frequencyList.containsKey(i)) frequencyList.put(i,1);//new one
-			    		if(frequencyList.containsKey(i)) {
-			    			int freqencyValue=frequencyList.get(i);
-			    			frequencyList.put(i,freqencyValue+1);//add 1
+			    Collection<Set<Integer>> set=container.values();
+			    for(Set subSet:set){
+			    	for(Object i:subSet){
+			    		if(!frequencyList.containsKey((int)i)) frequencyList.put((int)i,1);
+			    		if(frequencyList.containsKey((int)i)) {
+			    			int freqencyValue=frequencyList.get((int)i);
+			    			frequencyList.put((int)i,freqencyValue+1);
 			    		}
 			    	}
 			    }
@@ -101,8 +102,7 @@ public class Evaluation {
 			    	  }
 			    }  
 			    
-			    //compute the error of the community;
-			    
+			    //append error of the community;
 			    for (Integer key : frequencyList.keySet()) {  
 			    	  if(key!=keyOfMaximumFrequency){
 			    		  evaluation+=frequencyList.get(key);
