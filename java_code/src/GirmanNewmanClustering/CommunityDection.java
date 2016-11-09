@@ -83,41 +83,18 @@ public class CommunityDection{
 	       
 		    //keep moving edges form the graph until number of communities equals the number of ground truth.
 	       int numberOfCommunity=0;
-	       while(numberOfCommunity==NUMBER_GROUND_TRUTH){ 
+	       while(numberOfCommunity != NUMBER_GROUND_TRUTH){ 
 	    	   
-	    	   //recompute the betweenness score for pairs that are affected
-	    	   for(Pair pair:sampleTable.keySet()){
-	    		   //compute the shortest path between the pair ;edgeInshortestPath
-	    		   List<Node> ShortestPath=getShortestPath(pair);
-	    		   //store the shortest path to the sampleTable
-	    		   sampleTable.put(pair, ShortestPath);
-	    		   //increase the betweenness by one for every edge that composes the shortest path.
-	    		   for (Edge e : ShortestPath) {
-	    			   e.increaseBetweennessByOne();
-	    		   }
-	    	   }
+	    	   //update the edge betweenness of all edges and find the edge with the highest betweenness
+	    	   Edge edge=EdgeBetweenness.findHighestEdge(graph);
+	    	   // TODO: possible improvement: update only those that are affected by the previous edge removal
+	    	   // TODO: possible improvement: update base on a sample of nodes instead of all nodes    	    
 	    	   
-	    	   //iterate the edge_betweenness list and search the edge with highest betweenness
-	    	   double maxBetw=0.0;
-	    	   Edge edge=null;
-	    	   for (Edge e : graph.getEdgeList()) {
-	    			if (e.getBetweenness() > maxBetw) {
-	    				maxBetw = e.getBetweenness();
-	    				edge=e;
-	    			}
-				}
-	    	   
-	    	   //remove the edge E from graph's edgeList.
+	    	   //remove the edge with the highest betweenness	    	   
 	    	   graph.deleteEdge(edge);
-	    	   //generate the list to store node pairs whose shortest path are affected because of removing edge E
-	
-	
 	    	   
-	    	   //modify the edge_betweenness list through decreasing the betweenness_socre by 1 for every edge in the shortest path.
-	
-	    	   
-	
-	    	   //cluster the graph into connected components and compute the value of N
+	    	   //update numberOfCommunity by finding the number of connected components    	   
+	    	   numberOfCommunity = graph.getNumOfConnectedComponents();
 		    }
 		   
 	   }

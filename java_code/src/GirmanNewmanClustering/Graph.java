@@ -42,4 +42,11 @@ public class Graph {
     public int getNumberOfNode(){
     	return nodeList.size();
     }
+    /*
+     * TODO: return the number of connected components
+     * 
+     */
+    public int getNumOfConnectedComponents(){
+    	return 0;
+    }
 }
