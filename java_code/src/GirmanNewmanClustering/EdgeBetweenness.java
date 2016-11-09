@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 class ShortestPaths {
@@ -88,8 +89,88 @@ public class EdgeBetweenness {
 						
 		}
 		
+		Set<Edge> edgeList = graph.getEdgeList();
+		Edge bestEdge = null;
+		float highestBetweeness = -1;
+		for(Edge edge:edgeList){
+			int sourceIdx = edge.getSourceNodeID();
+			int destIdx = edge.getDestinationNodeID();
+			
+			float betweenessOfThisEdge = 0;
+			
+			for (Map.Entry<Integer, Node> nodeEntry1 : nodeList.entrySet()) {
+				Integer node1Idx = nodeEntry1.getKey();
+				HashMap<Integer, ShortestPaths> shortestPathMapForNode1 = shortestPathMap.get(node1Idx);
+				
+				if (!shortestPathMapForNode1.containsKey(sourceIdx)){
+					//node1 is not even connected to sourceIdx, this edge won't be on the shortest path between node1 and node2
+					continue;
+				}
+				if (!shortestPathMapForNode1.containsKey(destIdx)){
+					//node1 is not even connected to destIdx, this edge won't be on the shortest path between node1 and node2
+					continue;
+				}
+				
+				for (Map.Entry<Integer, Node> nodeEntry2 : nodeList.entrySet()) {
+					Integer node2Idx = nodeEntry2.getKey();
+					if (node1Idx == node2Idx){
+						continue;
+					}
+					
+					if (!shortestPathMapForNode1.containsKey(node2Idx)){
+						// these two nodes are not even connected, skip
+						// this happens when the graph is already split into disconnected components						
+						continue;
+					}
+					
+					HashMap<Integer, ShortestPaths> shortestPathMapForNode2 = shortestPathMap.get(node2Idx);
+					if (!shortestPathMapForNode2.containsKey(sourceIdx)){
+						//node2 is not even connected to sourceIdx, this edge won't be on the shortest path between node1 and node2
+						continue;
+					}
+					if (!shortestPathMapForNode2.containsKey(destIdx)){
+						//node2 is not even connected to destIdx, this edge won't be on the shortest path between node1 and node2
+						continue;
+					}
+										
+					ShortestPaths shortestPathsBetweenNode1AndNode2 = shortestPathMapForNode1.get(node2Idx);
+					
+					//1st attempt: node1 - source - edge - dest - node2					
+					ShortestPaths shortestPathsBetweenNode1AndSource = shortestPathMapForNode1.get(sourceIdx);
+					ShortestPaths shortestPathsBetweenNode2AndDest = shortestPathMapForNode2.get(destIdx);
+					if(shortestPathsBetweenNode1AndSource.distanceOfShortestPath+1+shortestPathsBetweenNode2AndDest.distanceOfShortestPath == shortestPathsBetweenNode1AndNode2.distanceOfShortestPath){
+						// edge lies on the shortest path from node1 to node 2
+						float edgeBetweennessIncrease =  (float)(shortestPathsBetweenNode1AndSource.numOfShortestPaths * shortestPathsBetweenNode2AndDest.numOfShortestPaths) / shortestPathsBetweenNode1AndNode2.numOfShortestPaths;
+						betweenessOfThisEdge += edgeBetweennessIncrease;
+
+						//1st attempt succeeded, no point doing 2nd attempt 						
+						continue;
+					}
+
+					//2nd attempt: node1 - source - edge - dest - node2					
+					ShortestPaths shortestPathsBetweenNode2AndSource = shortestPathMapForNode2.get(sourceIdx);
+					ShortestPaths shortestPathsBetweenNode1AndDest = shortestPathMapForNode1.get(destIdx);
+					if(shortestPathsBetweenNode2AndSource.distanceOfShortestPath+1+shortestPathsBetweenNode1AndDest.distanceOfShortestPath == shortestPathsBetweenNode1AndNode2.distanceOfShortestPath){
+						// edge lies on the shortest path from node2 to node 1
+						float edgeBetweennessIncrease =  (float)(shortestPathsBetweenNode2AndSource.numOfShortestPaths * shortestPathsBetweenNode1AndDest.numOfShortestPaths) / shortestPathsBetweenNode1AndNode2.numOfShortestPaths;
+						betweenessOfThisEdge += edgeBetweennessIncrease;
+					}					
+				}
+			}
 		
-		return null;
+			if (betweenessOfThisEdge > highestBetweeness){
+				highestBetweeness = betweenessOfThisEdge;
+				bestEdge = edge;
+			}			
+		}
+		
+		if (bestEdge == null){
+			System.out.println("no bestEdge can be found");
+		} else {
+			System.out.println("bestEdge with betweenness "+highestBetweeness+" found");
+		}
+		
+		return bestEdge;
 	}
 	
 	// this method takes in a graph and return the edge with the highest betweenness by random sampling
@@ -113,9 +194,15 @@ public class EdgeBetweenness {
 					continue;
 				}
 				node.addNeighbours(j);
+				
+				Edge edge = new Edge(i, j);
+				testGraph.addEdge(edge);
 			}
 			if (i==4){
 				node.addNeighbours(5);
+				
+				Edge edge = new Edge(i, 5);
+				testGraph.addEdge(edge);
 			}
 			
 			testGraph.addNode(node);
@@ -127,15 +214,22 @@ public class EdgeBetweenness {
 					continue;
 				}
 				node.addNeighbours(j);
+				
+				Edge edge = new Edge(i, j);
+				testGraph.addEdge(edge);
 			}
 			if (i==5){
 				node.addNeighbours(4);
+				
+				Edge edge = new Edge(i, 4);
+				testGraph.addEdge(edge);
 			}
 			
 			testGraph.addNode(node);
 		}
 		
-		EdgeBetweenness.findHighestEdge(testGraph);		
+		Edge edge = EdgeBetweenness.findHighestEdge(testGraph);
+		System.out.println("edge with highest betweenness: source: "+edge.getSourceNodeID()+" dest: "+edge.getDestinationNodeID());
 		
 	}
 	
