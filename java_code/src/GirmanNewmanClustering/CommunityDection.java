@@ -52,7 +52,9 @@ public class CommunityDection{
 	   public static void solve(Graph graph, int numberGroundTruth, String outputPath) throws Exception{
 		   //keep removing edges form the graph until number of communities equals the number of ground truth.
 	       int numberOfCommunity=1;
+	       int counter = 0;
 	       while(numberOfCommunity != numberGroundTruth){ 
+	    	   long startTime = System.currentTimeMillis();
 	    	   
 	    	   //update the edge betweenness of all edges and find the edge with the highest betweenness
 	    	   Edge edge=EdgeBetweenness.findHighestEdge(graph);
@@ -69,6 +71,11 @@ public class CommunityDection{
 	    	   
 	    	   //update numberOfCommunity by finding the number of connected components    	   
 	    	   numberOfCommunity = graph.getNumOfConnectedComponents();
+	    	   
+	    	   counter ++;
+	    	   System.out.println("counter: "+counter);
+	    	   long timeUsed = System.currentTimeMillis() - startTime;
+	    	   System.out.println("timeUsed for this round: "+ timeUsed);
 		    }
 		   
 	       ArrayList<Set<Integer>> communities = graph.getConnectedComponents();
@@ -122,9 +129,18 @@ public class CommunityDection{
 			solve(testGraph, 2, "output.txt");
 	   }
 	   
+	   private static void testSolveArtificialGraph(int numCommunities, int communitySize, double d, double e) throws Exception{
+		   ArrayList<Set<Integer>> groundTruth = GraphGenerator.generateCommunityGroundTruth(numCommunities, communitySize);
+		   ExportController.exportCommunities("groundtruth.txt", groundTruth);
+		   
+		   Graph graph = GraphGenerator.generateGraph(numCommunities, communitySize, d, e);		   		   
+		   System.out.println("graph generated");
+		   solve(graph, numCommunities, "output.txt");
+	   }
+	   
 	   
 	   public static void main(String[] args) throws Exception{
-		   testSolve();
+		   testSolveArtificialGraph(5, 10, 0.8, 0.2);
 		   
 //		   if (args.length!=1) {
 //			   System.err.println("Usage: CommunityDection <pathToDataFile>");
