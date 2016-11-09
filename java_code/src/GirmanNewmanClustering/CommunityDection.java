@@ -1,6 +1,7 @@
 package GirmanNewmanClustering;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -88,7 +89,10 @@ public class CommunityDection{
 	    	   //update the edge betweenness of all edges and find the edge with the highest betweenness
 	    	   Edge edge=EdgeBetweenness.findHighestEdge(graph);
 	    	   // TODO: possible improvement: update only those that are affected by the previous edge removal
-	    	   // TODO: possible improvement: update base on a sample of nodes instead of all nodes    	    
+	    	   // TODO: possible improvement: update base on a sample of nodes instead of all nodes
+	    	   if (edge == null) {
+	    		   // TODO: handle error when the algorithm cannot proceed anymore 	    		   
+	    	   }
 	    	   
 	    	   //remove the edge with the highest betweenness	    	   
 	    	   graph.deleteEdge(edge);
@@ -97,6 +101,10 @@ public class CommunityDection{
 	    	   numberOfCommunity = graph.getNumOfConnectedComponents();
 		    }
 		   
+	       ArrayList<Set<Integer>> communities = graph.getConnectedComponents();
+	       
+	       // TODO: maybe give the graph a name so that we can name the output file properly 	       
+	       ExportController.exportCommunities("output.txt", communities);
 	   }
 			
 			
