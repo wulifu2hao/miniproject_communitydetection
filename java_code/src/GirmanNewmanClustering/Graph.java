@@ -1,5 +1,6 @@
 package GirmanNewmanClustering;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -46,21 +47,32 @@ public class Graph {
     	return nodeList.size();
     }
     /*
-     * TODO: return the number of connected components
+     * return the number of connected components
      * 
      */
     public int getNumOfConnectedComponents(){
+    	return this.getConnectedComponents().size();
+    }
+    
+    /*
+     * return the connected components of the graph
+     * this is used after the community detection algorithm has finished
+     * and we want to output the result 
+     * 
+     */
+    public ArrayList<Set<Integer>> getConnectedComponents(){
     	Set<Integer> visited = new HashSet<Integer>();
+    	ArrayList<Set<Integer>> result = new ArrayList<Set<Integer>>();
     	
-    	int numComponents = 0;
     	for (Map.Entry<Integer, Node> entry : nodeList.entrySet()) {
     		Integer nodeIdx = entry.getKey();
     		if (visited.contains(nodeIdx)){
     			//we have visited this node before, no point visiting it again    			
     			continue;
     		}    		
-    		numComponents++;
+    		Set<Integer> newComponent = new HashSet<Integer>();
     		visited.add(nodeIdx);
+    		newComponent.add(nodeIdx);
     		
     		Stack<Integer> st = new Stack<Integer>();
     		st.push(nodeIdx);
@@ -76,11 +88,14 @@ public class Graph {
     				
     				st.push(neighbour);
     				visited.add(neighbour);
+    				newComponent.add(neighbour);
     			}
-    		}    		
+    		}  
+    		
+    		result.add(newComponent);
     	}
     	
-    	return numComponents;
+    	return result;
     }
     
     private static void testGetNumOfConnectedComponents(){
@@ -114,8 +129,16 @@ public class Graph {
 			testGraph.addNode(node);
 		}
 		
-		int numComponents = testGraph.getNumOfConnectedComponents(); 
-		System.out.println("num of connected components of test grpah is "+numComponents);
+		ArrayList<Set<Integer>> components = testGraph.getConnectedComponents(); 
+		System.out.println("num of connected components of test grpah is "+components.size());
+		for(int i=0; i<components.size();i++){
+			Set<Integer> component = components.get(i);
+			String nodeIndexesStr = "";
+			for(Integer nodeIdx:component){
+				nodeIndexesStr += (nodeIdx+" "); 
+			}
+			System.out.println("component "+i+" :"+nodeIndexesStr);
+		}
     }
     
     public static void main(String[] args){	
