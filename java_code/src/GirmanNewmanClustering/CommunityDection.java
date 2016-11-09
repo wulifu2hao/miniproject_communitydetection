@@ -54,6 +54,7 @@ public class CommunityDection{
 	       int numberOfCommunity=1;
 	       int counter = 0;
 	       while(numberOfCommunity != numberGroundTruth){ 
+	    	   long startTime = System.currentTimeMillis();
 	    	   
 	    	   //update the edge betweenness of all edges and find the edge with the highest betweenness
 	    	   Edge edge=EdgeBetweenness.findHighestEdge(graph);
@@ -71,8 +72,15 @@ public class CommunityDection{
 	    	   //update numberOfCommunity by finding the number of connected components    	   
 	    	   numberOfCommunity = graph.getNumOfConnectedComponents();
 	    	   
+<<<<<<< HEAD
 	    	   counter++;
 	    	   System.out.println(counter);
+=======
+	    	   counter ++;
+	    	   System.out.println("counter: "+counter);
+	    	   long timeUsed = System.currentTimeMillis() - startTime;
+	    	   System.out.println("timeUsed for this round: "+ timeUsed);
+>>>>>>> 9233c4806d40a6a7f3ef9cf536cdead0575be094
 		    }
 		   
 	       ArrayList<Set<Integer>> communities = graph.getConnectedComponents();
@@ -126,8 +134,18 @@ public class CommunityDection{
 			solve(testGraph, 2, "output.txt");
 	   }
 	   
+	   private static void testSolveArtificialGraph(int numCommunities, int communitySize, double d, double e) throws Exception{
+		   ArrayList<Set<Integer>> groundTruth = GraphGenerator.generateCommunityGroundTruth(numCommunities, communitySize);
+		   ExportController.exportCommunities("groundtruth.txt", groundTruth);
+		   
+		   Graph graph = GraphGenerator.generateGraph(numCommunities, communitySize, d, e);		   		   
+		   System.out.println("graph generated");
+		   solve(graph, numCommunities, "output.txt");
+	   }
+	   
 	   
 	   public static void main(String[] args) throws Exception{
+<<<<<<< HEAD
 		   /*if (args.length!=1) {
 			   System.err.println("Usage: CommunityDection <pathToDataFile>");
 			   System.exit(2);
@@ -135,6 +153,9 @@ public class CommunityDection{
 		   
 		   //construct graph 
 		   Graph graph=ImportController.importGraph("/Users/yangtingting/Documents/miniproject/miniproject_communitydetection/datafile/network.txt");
+=======
+		   testSolveArtificialGraph(5, 10, 0.8, 0.2);
+>>>>>>> 9233c4806d40a6a7f3ef9cf536cdead0575be094
 		   
 		   //randomly sample a set of node pairs from the nodeList and store it into sampleTable
 		   //the maximal id of node=548458

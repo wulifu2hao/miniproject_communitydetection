@@ -147,6 +147,41 @@ public class Graph {
 		}
     }
     
+    public void printSelf(){
+    	for (Map.Entry<Integer, Node> entry : nodeList.entrySet()) {
+    		Integer nodeIdx = entry.getKey();
+    		Node node = entry.getValue();
+    		String neighbourStr = "";
+    		Set<Integer> neighbours = node.getNeighbours(); 
+    		for(Integer neighbour:neighbours){
+    			neighbourStr += (neighbour+",");
+    		}
+    		System.out.println("nodeIdx: "+nodeIdx+" ["+neighbourStr+"]");    		
+    	}	
+    }
+    
+    public void printSelfMatrix(){
+    	for (Map.Entry<Integer, Node> entry1 : nodeList.entrySet()) {
+    		Integer nodeIdx1 = entry1.getKey();
+    		Node node1 = entry1.getValue();
+    		for (Map.Entry<Integer, Node> entry2 : nodeList.entrySet()) {
+    			Integer nodeIdx2 = entry2.getKey();
+    			if(nodeIdx1 == nodeIdx2){
+        			System.out.print("1 ");
+        			continue;
+        		}
+    		
+    			if(node1.getNeighbours().contains(nodeIdx2)){
+    				System.out.print("1 ");
+    			}else {
+    				System.out.print("0 ");
+    			}
+    		}
+    		
+    		System.out.print("\n");
+    	}	
+    }
+    
     public static void main(String[] args){	
     	testGetNumOfConnectedComponents();
 	}
