@@ -8,12 +8,11 @@ public class Node{
     private HashSet<Integer> neighbours;	// An array of its neighbours ; An array of edges connected with this node. 
     
     /*
-     * create a node object with a single neighbour
+     * create a node object
      */
-    public Node(int id,int firstNeighbour){
+    public Node(int id){
     	this.id=id;
     	this.neighbours=new HashSet<Integer>();
-    	neighbours.add(firstNeighbour);
     }
   
     public HashSet<Integer> getNeighbours() {
@@ -29,5 +28,11 @@ public class Node{
      */
     public void addNeighbours(int newNeighbour){
         neighbours.add(newNeighbour);
+    }
+    
+    public void removeNeighbour(int neighbour){
+    	if (neighbours.contains(neighbour)){
+    		neighbours.remove(neighbour);
+    	}
     }
 }
