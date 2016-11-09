@@ -140,7 +140,8 @@ public class CommunityDection{
 		   
 		   Graph graph = GraphGenerator.generateGraph(numCommunities, communitySize, d, e);		   		   
 		   System.out.println("graph generated");
-		   solve(graph, numCommunities, "output.txt", 0.5);
+		   solve(graph, numCommunities, "output.txt", 1);
+		   solve(graph, numCommunities, "output_sample.txt", 0.5);
 	   }
 	   
 	   
