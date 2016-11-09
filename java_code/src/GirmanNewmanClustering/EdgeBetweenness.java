@@ -3,10 +3,8 @@ package GirmanNewmanClustering;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.Map.Entry;
 
 class ShortestPaths {
 	public int numOfShortestPaths;
@@ -185,7 +183,6 @@ public class EdgeBetweenness {
 	}
 	
 	private static void testFindHighestEdge(){
-		System.out.println("succeed");
 		Graph testGraph = new Graph();
 		for(int i=0; i<5; i++){
 			Node node = new Node(i);
