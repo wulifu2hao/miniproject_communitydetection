@@ -26,6 +26,12 @@ public class Graph {
     public void deleteEdge(Edge edge){
     	// TODO: shall we remove the edge from the Node object's property as well?    	
     	edgeList.remove(edge);
+    	
+    	int sourceIdx = edge.getSourceNodeID();
+		int destIdx = edge.getDestinationNodeID();
+		nodeList.get(sourceIdx).removeNeighbour(destIdx);
+		nodeList.get(destIdx).removeNeighbour(sourceIdx);
+    	
     }
     public HashMap<Integer, Node> getNodeList() {
         return nodeList;

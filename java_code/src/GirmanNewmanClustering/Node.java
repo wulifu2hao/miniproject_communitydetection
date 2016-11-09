@@ -29,4 +29,10 @@ public class Node{
     public void addNeighbours(int newNeighbour){
         neighbours.add(newNeighbour);
     }
+    
+    public void removeNeighbour(int neighbour){
+    	if (neighbours.contains(neighbour)){
+    		neighbours.remove(neighbour);
+    	}
+    }
 }

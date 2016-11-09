@@ -49,49 +49,19 @@ public class CommunityDection{
 	   private static final int NUMBER_GROUND_TRUTH=5000;		//used to check if satisfying termination condition,the number of communities in reality.
 	   private static int sampleSize;	//maximum =Cn2,n is the number of distinct nodes in the graph.
 	  
-	   
-	   
-	   public static void main(String[] args) throws IOException{
-		   if (args.length!=1) {
-			   System.err.println("Usage: CommunityDection <pathToDataFile>");
-			   System.exit(2);
-		   }
-		   
-		   //construct graph 
-		   Graph graph=ImportController.importGraph(args[0]);
-		   
-		   //randomly sample a set of node pairs from the nodeList and store it into sampleTable
-		   //the maximal id of node=548458
-	       HashMap<Pair,LinkedList<Edge>> sampleTable=new HashMap<Pair,LinkedList<Edge>>();
-	       Random rand = new Random(System.currentTimeMillis());
-	       Set<Integer> nodeIdList=graph.getNodeList().keySet();
-	       int left;
-	       int right;
-	       for(int i=0;i<sampleSize;){
-	    	   do{
-	    		   left=rand.nextInt(548459); //sample from 1 to 548459
-	    	   }while(!nodeIdList.contains(left) | left==0);
-	    	   
-	    	   do{
-	    		   right=rand.nextInt(548459); //sample from 1 to 548459
-	    	   }while(!nodeIdList.contains(right) | right==0 | right==left);
-	    	   
-	    	   Pair pair=new Pair(left,right);
-	    	   if(sampleTable.containsKey(pair)) continue;
-	    	   sampleTable.put(pair, null);
-	    	   i++;
-	       }
-	       
-		    //keep moving edges form the graph until number of communities equals the number of ground truth.
-	       int numberOfCommunity=0;
-	       while(numberOfCommunity != NUMBER_GROUND_TRUTH){ 
+	   public static void solve(Graph graph, int numberGroundTruth, String outputPath) throws Exception{
+		   //keep removing edges form the graph until number of communities equals the number of ground truth.
+	       int numberOfCommunity=1;
+	       while(numberOfCommunity != numberGroundTruth){ 
 	    	   
 	    	   //update the edge betweenness of all edges and find the edge with the highest betweenness
 	    	   Edge edge=EdgeBetweenness.findHighestEdge(graph);
 	    	   // TODO: possible improvement: update only those that are affected by the previous edge removal
 	    	   // TODO: possible improvement: update base on a sample of nodes instead of all nodes
 	    	   if (edge == null) {
-	    		   // TODO: handle error when the algorithm cannot proceed anymore 	    		   
+	    		   // TODO: handle error when the algorithm cannot proceed anymore
+	    		   System.out.println("numberOfCommunity: "+numberOfCommunity);
+	    		   throw new Exception("cannot proceed");
 	    	   }
 	    	   
 	    	   //remove the edge with the highest betweenness	    	   
@@ -102,11 +72,93 @@ public class CommunityDection{
 		    }
 		   
 	       ArrayList<Set<Integer>> communities = graph.getConnectedComponents();
-	       
-	       // TODO: maybe give the graph a name so that we can name the output file properly 	       
-	       ExportController.exportCommunities("output.txt", communities);
+	        	       
+	       ExportController.exportCommunities(outputPath, communities);
 	   }
+	   
+	   private static void testSolve() throws Exception{
+			Graph testGraph = new Graph();
+			for(int i=0; i<5; i++){
+				Node node = new Node(i);
+				for (int j=0; j<5; j++){
+					if(i == j){
+						continue;
+					}
+					node.addNeighbours(j);
+					
+					Edge edge = new Edge(i, j);
+					testGraph.addEdge(edge);
+				}
+				if (i==4){
+					node.addNeighbours(5);
+					
+					Edge edge = new Edge(i, 5);
+					testGraph.addEdge(edge);
+				}
+				
+				testGraph.addNode(node);
+			}
+			for(int i=5; i<10; i++){
+				Node node = new Node(i);
+				for (int j=5; j<10; j++){
+					if(i == j){
+						continue;
+					}
+					node.addNeighbours(j);
+					
+					Edge edge = new Edge(i, j);
+					testGraph.addEdge(edge);
+				}
+				if (i==5){
+					node.addNeighbours(4);
+					
+					Edge edge = new Edge(i, 4);
+					testGraph.addEdge(edge);
+				}
+				
+				testGraph.addNode(node);
+			}
 			
+			solve(testGraph, 2, "output.txt");
+	   }
+	   
+	   
+	   public static void main(String[] args) throws Exception{
+		   testSolve();
+		   
+//		   if (args.length!=1) {
+//			   System.err.println("Usage: CommunityDection <pathToDataFile>");
+//			   System.exit(2);
+//		   }
+//		   
+//		   //construct graph 
+//		   Graph graph=ImportController.importGraph(args[0]);
+//		   
+//		   //randomly sample a set of node pairs from the nodeList and store it into sampleTable
+//		   //the maximal id of node=548458
+//	       HashMap<Pair,LinkedList<Edge>> sampleTable=new HashMap<Pair,LinkedList<Edge>>();
+//	       Random rand = new Random(System.currentTimeMillis());
+//	       Set<Integer> nodeIdList=graph.getNodeList().keySet();
+//	       int left;
+//	       int right;
+//	       for(int i=0;i<sampleSize;){
+//	    	   do{
+//	    		   left=rand.nextInt(548459); //sample from 1 to 548459
+//	    	   }while(!nodeIdList.contains(left) | left==0);
+//	    	   
+//	    	   do{
+//	    		   right=rand.nextInt(548459); //sample from 1 to 548459
+//	    	   }while(!nodeIdList.contains(right) | right==0 | right==left);
+//	    	   
+//	    	   Pair pair=new Pair(left,right);
+//	    	   if(sampleTable.containsKey(pair)) continue;
+//	    	   sampleTable.put(pair, null);
+//	    	   i++;
+//	       }
+//	       
+//	       solve(graph, NUMBER_GROUND_TRUTH, "output.txt");
+	   }
+	
 			
 }
 
