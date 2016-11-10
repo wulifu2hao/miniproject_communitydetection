@@ -60,7 +60,7 @@ public class CommunityDection{
 	    	   
 	    	   //update the edge betweenness of all edges and find the edge with the highest betweenness
 	    	   Edge edge;
-	    	   if(sampleNum == 0){
+	    	   if(sampleNum == 1){
 	    		   edge=EdgeBetweenness.findHighestEdge(graph);
 	    	   } else {
 	    		   edge=EdgeBetweenness.findHighestEdgeRandom(graph, sampleNum);
@@ -155,7 +155,7 @@ public class CommunityDection{
 	   
 	   
 	   public static void main(String[] args) throws Exception{
-		   testSolveArtificialGraph(4, 32, 0.3, 0.05);
+		   testSolveArtificialGraph(5, 20, 0.8, 0.05);
 		   
 		   /*if (args.length!=1) {
 			   System.err.println("Usage: CommunityDection <pathToDataFile>");
