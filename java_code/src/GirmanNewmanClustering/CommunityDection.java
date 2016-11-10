@@ -72,15 +72,10 @@ public class CommunityDection{
 	    	   //update numberOfCommunity by finding the number of connected components    	   
 	    	   numberOfCommunity = graph.getNumOfConnectedComponents();
 	    	   
-<<<<<<< HEAD
-	    	   counter++;
-	    	   System.out.println(counter);
-=======
 	    	   counter ++;
 	    	   System.out.println("counter: "+counter);
 	    	   long timeUsed = System.currentTimeMillis() - startTime;
 	    	   System.out.println("timeUsed for this round: "+ timeUsed);
->>>>>>> 9233c4806d40a6a7f3ef9cf536cdead0575be094
 		    }
 		   
 	       ArrayList<Set<Integer>> communities = graph.getConnectedComponents();
@@ -145,17 +140,16 @@ public class CommunityDection{
 	   
 	   
 	   public static void main(String[] args) throws Exception{
-<<<<<<< HEAD
+		   testSolveArtificialGraph(5, 10, 0.8, 0.2);
+		   
 		   /*if (args.length!=1) {
 			   System.err.println("Usage: CommunityDection <pathToDataFile>");
 			   System.exit(2);
 		   }*/
 		   
 		   //construct graph 
-		   Graph graph=ImportController.importGraph("/Users/yangtingting/Documents/miniproject/miniproject_communitydetection/datafile/network.txt");
-=======
-		   testSolveArtificialGraph(5, 10, 0.8, 0.2);
->>>>>>> 9233c4806d40a6a7f3ef9cf536cdead0575be094
+//		   Graph graph=ImportController.importGraph("/Users/yangtingting/Documents/miniproject/miniproject_communitydetection/datafile/network.txt");
+		   
 		   
 		   //randomly sample a set of node pairs from the nodeList and store it into sampleTable
 		   //the maximal id of node=548458
@@ -179,7 +173,7 @@ public class CommunityDection{
 	    	   i++;
 	       }*/
 	       
-	       solve(graph, NUMBER_GROUND_TRUTH, "output.txt");
+//	       solve(graph, NUMBER_GROUND_TRUTH, "output.txt");
 	   }
 	
 			
