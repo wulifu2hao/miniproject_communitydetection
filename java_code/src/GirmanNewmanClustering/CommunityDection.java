@@ -157,36 +157,37 @@ public class CommunityDection{
 	   public static void main(String[] args) throws Exception{
 		   testSolveArtificialGraph(4, 32, 0.3, 0.05);
 		   
-//		   if (args.length!=1) {
-//			   System.err.println("Usage: CommunityDection <pathToDataFile>");
-//			   System.exit(2);
-//		   }
-//		   
-//		   //construct graph 
-//		   Graph graph=ImportController.importGraph(args[0]);
-//		   
-//		   //randomly sample a set of node pairs from the nodeList and store it into sampleTable
-//		   //the maximal id of node=548458
-//	       HashMap<Pair,LinkedList<Edge>> sampleTable=new HashMap<Pair,LinkedList<Edge>>();
-//	       Random rand = new Random(System.currentTimeMillis());
-//	       Set<Integer> nodeIdList=graph.getNodeList().keySet();
-//	       int left;
-//	       int right;
-//	       for(int i=0;i<sampleSize;){
-//	    	   do{
-//	    		   left=rand.nextInt(548459); //sample from 1 to 548459
-//	    	   }while(!nodeIdList.contains(left) | left==0);
-//	    	   
-//	    	   do{
-//	    		   right=rand.nextInt(548459); //sample from 1 to 548459
-//	    	   }while(!nodeIdList.contains(right) | right==0 | right==left);
-//	    	   
-//	    	   Pair pair=new Pair(left,right);
-//	    	   if(sampleTable.containsKey(pair)) continue;
-//	    	   sampleTable.put(pair, null);
-//	    	   i++;
-//	       }
-//	       
+		   /*if (args.length!=1) {
+			   System.err.println("Usage: CommunityDection <pathToDataFile>");
+			   System.exit(2);
+		   }*/
+		   
+		   //construct graph 
+//		   Graph graph=ImportController.importGraph("/Users/yangtingting/Documents/miniproject/miniproject_communitydetection/datafile/network.txt");
+		   
+		   
+		   //randomly sample a set of node pairs from the nodeList and store it into sampleTable
+		   //the maximal id of node=548458
+	       /*HashMap<Pair,LinkedList<Edge>> sampleTable=new HashMap<Pair,LinkedList<Edge>>();
+	       Random rand = new Random(System.currentTimeMillis());
+	       Set<Integer> nodeIdList=graph.getNodeList().keySet();
+	       int left;
+	       int right;
+	       for(int i=0;i<sampleSize;){
+	    	   do{
+	    		   left=rand.nextInt(548459); //sample from 1 to 548459
+	    	   }while(!nodeIdList.contains(left) | left==0);
+	    	   
+	    	   do{
+	    		   right=rand.nextInt(548459); //sample from 1 to 548459
+	    	   }while(!nodeIdList.contains(right) | right==0 | right==left);
+	    	   
+	    	   Pair pair=new Pair(left,right);
+	    	   if(sampleTable.containsKey(pair)) continue;
+	    	   sampleTable.put(pair, null);
+	    	   i++;
+	       }*/
+	       
 //	       solve(graph, NUMBER_GROUND_TRUTH, "output.txt");
 	   }
 	
