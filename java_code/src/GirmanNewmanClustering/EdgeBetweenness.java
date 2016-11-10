@@ -27,32 +27,37 @@ public class EdgeBetweenness {
 	}
 	
 	// this method takes in a graph and return the edge with the highest betweenness by random sampling
-	public static Edge findHighestEdgeRandom(Graph graph, double sampleRate){		
+	public static Edge findHighestEdgeRandom(Graph graph, int sampleNum){		
 		//   1. randomly sample a set of nodes according to the sample rate
 		//		for each node in the sample, do a BFS to find its number and distance of shortest path to all other nodes
 		//		this should take O(sm)		
 		//	 2. for every edge, compute its betweenness from every pair of nodes' in the sample
 		//		this should take O(ms^2)
 				
-		return findHighestEdgeBase(graph, sampleNodes(graph, sampleRate));
+		return findHighestEdgeBase(graph, sampleNodes(graph, sampleNum));
 	}
 	
-	private static HashMap<Integer, Node> sampleNodes(Graph graph, double sampleRate){
+	private static HashMap<Integer, Node> sampleNodes(Graph graph, int sampleNum){
 		Random rand = new Random(System.currentTimeMillis());		
 		HashMap<Integer, Node> nodeSample = new HashMap<Integer, Node>();
 		
 		HashMap<Integer, Node> nodeList = graph.getNodeList();
-		for (Map.Entry<Integer, Node> entry : nodeList.entrySet()) {
-			double randomDouble = rand.nextDouble();
-			if (randomDouble > sampleRate){
+		int maxNodeIdx = nodeList.size();
+		while(nodeSample.size() < sampleNum){
+			Integer nodeIdx = rand.nextInt(maxNodeIdx);
+			if (nodeSample.containsKey(nodeIdx)){
 				continue;
 			}
 			
-			Integer nodeIdx = entry.getKey();
-			Node node = entry.getValue();
-			nodeSample.put(nodeIdx, node);			
+			if(!nodeList.containsKey(nodeIdx)){
+				continue;
+			}
+			
+			Node node = nodeList.get(nodeIdx);
+			nodeSample.put(nodeIdx, node);
 		}
 		
+//		System.out.println("sample size "+nodeSample.size());
 		return nodeSample;
 	}
 	
@@ -201,7 +206,7 @@ public class EdgeBetweenness {
 		if (bestEdge == null){
 			System.out.println("no bestEdge can be found");
 		} else {
-			System.out.println("bestEdge with betweenness "+highestBetweeness+" found");
+//			System.out.println("bestEdge with betweenness "+highestBetweeness+" found");
 		}
 		
 		return bestEdge;

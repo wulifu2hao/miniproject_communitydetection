@@ -23,8 +23,7 @@ public class Graph {
     public void addNode(final Node node) {
         nodeList.put(node.getId(), node);
     }
-    public void deleteEdge(Edge edge){
-    	// TODO: shall we remove the edge from the Node object's property as well?    	
+    public void deleteEdge(Edge edge){    	
     	edgeList.remove(edge);
     	
     	int sourceIdx = edge.getSourceNodeID();

@@ -79,7 +79,7 @@ if __name__ == '__main__':
     data_dir = argv[1]
     ground_truth_path = join(data_dir, 'groundtruth.txt')
     normal_result_path = join(data_dir, 'output.txt')
-    sample_result_path = join(data_dir, 'output.txt')
+    sample_result_path = join(data_dir, 'output_sample.txt')
     ground_truth = get_ground_truth(ground_truth_path)
     normal_result = evaluate_result(normal_result_path, ground_truth)
     sample_result = evaluate_result(sample_result_path, ground_truth)
