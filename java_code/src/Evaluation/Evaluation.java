@@ -57,7 +57,7 @@ public class Evaluation {
 			String str="";
 			int count=1;	//index starts from 1
 			while((str=br.readLine())!=null){
-				pw.write((""+count+"\t"+str+"\n").toCharArray());
+				pw.write((""+count+" "+str+"\n").toCharArray());
 				count++;
 			}
 			Logpw.write(("the total number of communities in groundtruth file is:"+(count-1)+"\n").toCharArray());
@@ -70,7 +70,7 @@ public class Evaluation {
 		    
 		    while(sc1.hasNextLine()){
 		    	//store one community into the community variable
-		    	community=sc1.nextLine().split("\t");
+		    	community=sc1.nextLine().split(" ");
 		    	HashMap<String,Integer> container=new HashMap<String,Integer>();
 		    	for(String s:community){
 		    		container.put(s, 0);
@@ -81,7 +81,7 @@ public class Evaluation {
 		    	String[] temp;
 			    while(sc2.hasNextLine()){
 			    	//store one community into the temp
-			    	temp=sc2.nextLine().split("\t");
+			    	temp=sc2.nextLine().split(" ");
 			    	String[] communityGroundTruth=new String[temp.length-1];
 			    	int index=Integer.parseInt(temp[0]);
 			    	for(int i=1;i<temp.length;i++){
@@ -142,7 +142,7 @@ public class Evaluation {
 			       else {
 			    	   int freqencyValue=frequencyList.get(intkey);
 			    	   frequencyList.put(intkey,freqencyValue+1);
-			    	   Logpw.write(("increase by 1:"+intkey+"\t"+freqencyValue+"\n").toCharArray());
+			    	   Logpw.write(("increase by 1:"+intkey+"    "+freqencyValue+"\n").toCharArray());
 				   }
 			    }
 			    
@@ -176,8 +176,8 @@ public class Evaluation {
 			    		  
 			    	  }
 			    }  
-			    Logpw.write(("index Of The Community is"+indexOfTheCommunity+"\n").toCharArray());
-			    Logpw.write(("maximal frequency is"+maximumfrequency+"\n").toCharArray());
+			    Logpw.write(("index Of The Community is "+indexOfTheCommunity+"\n").toCharArray());
+			    Logpw.write(("maximal frequency is "+maximumfrequency+"\n").toCharArray());
 			    //append error of the community;
 			    for (Integer key : frequencyList.keySet()) {  
 			    	  if(key!=indexOfTheCommunity){

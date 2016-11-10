@@ -140,7 +140,7 @@ public class CommunityDection{
 	   
 	   
 	   public static void main(String[] args) throws Exception{
-		   testSolveArtificialGraph(5, 10, 0.8, 0.2);
+		   testSolveArtificialGraph(10, 5, 0.8, 0.2);
 		   
 		   /*if (args.length!=1) {
 			   System.err.println("Usage: CommunityDection <pathToDataFile>");
