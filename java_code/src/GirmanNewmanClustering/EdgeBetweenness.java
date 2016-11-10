@@ -125,8 +125,10 @@ public class EdgeBetweenness {
 					frontier = newFrontier;
 				}
 			}
-						
+//			System.out.println("finish finding shorteset path for one node");		
 		}
+		
+//		System.out.println("finish finding shorteset path for this round");
 		
 		Set<Edge> edgeList = graph.getEdgeList();
 		Edge bestEdge = null;
@@ -201,6 +203,8 @@ public class EdgeBetweenness {
 				highestBetweeness = betweenessOfThisEdge;
 				bestEdge = edge;
 			}			
+			
+//			System.out.println("finish updating betweenness for one edge");
 		}
 		
 		if (bestEdge == null){

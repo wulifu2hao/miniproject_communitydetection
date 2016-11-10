@@ -40,7 +40,7 @@ public class GraphGenerator {
 			}
 		}
 		
-		
+//		System.out.println("number of edges in this graph "+graph.getNumberOfEdge());
 		return graph;		
 	}
 	

@@ -72,20 +72,66 @@ def evaluate_result(path, ground_truth):
 
 if __name__ == '__main__':
     from sys import argv
-    from os.path import join
+    from os.path import join, isfile
+    from os import listdir
     if len(argv) < 2:
         print 'please input the data dir'
 
     data_dir = argv[1]
-    ground_truth_path = join(data_dir, 'groundtruth.txt')
-    normal_result_path = join(data_dir, 'output.txt')
-    sample_result_path = join(data_dir, 'output_sample.txt')
-    ground_truth = get_ground_truth(ground_truth_path)
-    normal_result = evaluate_result(normal_result_path, ground_truth)
-    sample_result = evaluate_result(sample_result_path, ground_truth)
+    e_list = []
+    for i in range(8):
+        e_list.append(0.05*i)
 
-    print 'mis classified rate for normal algorithm: ', normal_result
-    print 'mis classified rate for sampling algorithm: ', sample_result
+    num_attempts = 5
+
+    # onlyfiles = [f for f in listdir(data_dir) if isfile(join(data_dir, f))]
+    # output_filename_list = []
+    # for filename in onlyfiles:
+    #     if filename == 'groundtruth.txt':
+    #         continue
+    #     if filename.endswith('.txt'):
+    #         output_filename_list.append(filename)
+
+    ground_truth_path = join(data_dir, 'groundtruth.txt')
+    ground_truth = get_ground_truth(ground_truth_path)
+
+    rates_sampling = []
+    for i in range(1, 9):
+        rate_sum = 0
+        for j in range(5):
+            output_filename  = 'output_sample_i=%d_j=%d.txt'%(i, j)
+            filepath = join(data_dir, output_filename)
+            result = evaluate_result(filepath, ground_truth)
+            rate_sum += result
+        rate_average = rate_sum/5
+        rates_sampling.append(rate_average)
+        # print '[sampling] mis classified rate e = %f is %f'%(0.05*i, rate_average)
+
+    print 'sampling', rates_sampling
+
+    rates_normal = []
+    for i in range(1, 9):
+        rate_sum = 0
+        for j in range(5):
+            output_filename  = 'output_i=%d_j=%d.txt'%(i, j)
+            filepath = join(data_dir, output_filename)
+            if not isfile(filepath):
+                break
+            result = evaluate_result(filepath, ground_truth)
+            rate_sum += result
+        rate_average = rate_sum/5
+        rates_normal.append(rate_average)
+        # print '[normal] mis classified rate e = %f is %f'%(0.05*i, rate_average)
+
+    print 'normal', rates_normal
+
+    # sample_result_path = join(data_dir, 'output_sample.txt')
+
+
+    # sample_result = evaluate_result(sample_result_path, ground_truth)
+
+
+    # print 'mis classified rate for sampling algorithm: ', sample_result
 
 
 

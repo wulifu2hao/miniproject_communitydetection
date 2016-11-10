@@ -53,7 +53,7 @@ public class CommunityDection{
 		   long solvingStartTime = System.currentTimeMillis();
 		   //keep removing edges form the graph until number of communities equals the number of ground truth.
 	       int numberOfCommunity=graph.getNumOfConnectedComponents();
-	       System.out.println("initiali num of communities "+numberOfCommunity);
+//	       System.out.println("initial num of communities "+numberOfCommunity);
 	       int counter = 0;
 	       while(numberOfCommunity < numberGroundTruth){ 
 	    	   long startTime = System.currentTimeMillis();
@@ -81,7 +81,7 @@ public class CommunityDection{
 	    	   
 	    	   counter ++;	    	   
 	    	   if (counter % 100 == 0){
-	    		   System.out.println("counter: "+counter);
+//	    		   System.out.println("counter: "+counter);
 	    	   }
 	    	   long timeUsed = System.currentTimeMillis() - startTime;
 //	    	   System.out.println("timeUsed for this round: "+ timeUsed+"ms");
@@ -92,7 +92,11 @@ public class CommunityDection{
 	       ExportController.exportCommunities(outputPath, communities);
 	       
 	       long timeUsed = System.currentTimeMillis() - solvingStartTime;
-	       System.out.println("timeUsed for solving problem: "+ timeUsed+"ms");
+	       String tag = "[Normal]";
+	       if (sampleNum != 1){
+	    	   tag = "[Sampling]";
+	       }
+	       System.out.println(tag+" timeUsed for solving problem: "+ timeUsed+"ms");
 	   }
 	   
 	   private static void testSolve() throws Exception{
@@ -147,15 +151,58 @@ public class CommunityDection{
 		   
 		   Graph graph1 = GraphGenerator.generateGraph(numCommunities, communitySize, d, e);
 		   System.out.println("graph generated");
-		   solve(graph1, numCommunities, "output.txt", 1);
+//		   solve(graph1, numCommunities, "output.txt", 1);
 		   
 		   Graph graph2 = GraphGenerator.generateGraph(numCommunities, communitySize, d, e);
-		   solve(graph2, numCommunities, "output_sample.txt", 5);
+		   solve(graph2, numCommunities, "output_sample.txt", 10);
+	   }
+	   
+	   private static void testSolveArtificialGraphSample(int numCommunities, int communitySize, double d) throws Exception{
+		   ArrayList<Set<Integer>> groundTruth = GraphGenerator.generateCommunityGroundTruth(numCommunities, communitySize);
+		   ExportController.exportCommunities("groundtruth.txt", groundTruth);
+		   
+		   int numAttempts = 5;
+		   for(int i=1; i<=6; i++){
+			   double e = 0.05*i;
+			   for (int j=0; j<numAttempts; j++){
+				   Graph graph = GraphGenerator.generateGraph(numCommunities, communitySize, d, e);
+				   String outputFilename  = "output_sample_i="+i+"_j="+j+".txt";
+				   solve(graph, numCommunities, outputFilename, 30);
+			   }			   
+		   }		  
+	   }
+	   
+	   private static void testSolveArtificialGraphNormal(int numCommunities, int communitySize, double d) throws Exception{
+		   ArrayList<Set<Integer>> groundTruth = GraphGenerator.generateCommunityGroundTruth(numCommunities, communitySize);
+		   ExportController.exportCommunities("groundtruth.txt", groundTruth);
+		   
+		   int numAttempts = 5;
+		   for(int i=5; i<=5; i++){
+			   double e = 0.05*i;
+			   for (int j=0; j<numAttempts; j++){
+				   Graph graph = GraphGenerator.generateGraph(numCommunities, communitySize, d, e);
+				   String outputFilename  = "output_i="+i+"_j="+j+".txt";
+				   solve(graph, numCommunities, outputFilename, 1);
+			   }			   
+		   }		  
+	   }
+	   
+	   private static void testRunningTime() throws Exception{
+		   int communitySize = 20;
+		   for(int numCommunities=1;numCommunities<10; numCommunities++){
+			   Graph graph = GraphGenerator.generateGraph(numCommunities, communitySize, 0.5, 0.1);
+			   String outputFilename  = "trash.txt";
+			   solve(graph, numCommunities, outputFilename, 30);
+		   }		   
 	   }
 	   
 	   
+	   
+	   
 	   public static void main(String[] args) throws Exception{
-		   testSolveArtificialGraph(5, 20, 0.8, 0.05);
+//		   testSolveArtificialGraphSample(10, 20, 0.5);
+//		   testSolveArtificialGraphNormal(5, 20, 0.5);
+		   testRunningTime();
 		   
 		   /*if (args.length!=1) {
 			   System.err.println("Usage: CommunityDection <pathToDataFile>");
@@ -163,8 +210,8 @@ public class CommunityDection{
 		   }*/
 		   
 		   //construct graph 
-//		   Graph graph=ImportController.importGraph("/Users/yangtingting/Documents/miniproject/miniproject_communitydetection/datafile/network.txt");
-		   
+//		   Graph graph=ImportController.importGraph("/Users/lifu.wu/Documents/combinatorial/community_detection/java_code/data/com-amazon.ungraph.txt");
+//		   solve(graph, 5000, "output_amazon_5000.txt", 2);
 		   
 		   //randomly sample a set of node pairs from the nodeList and store it into sampleTable
 		   //the maximal id of node=548458
